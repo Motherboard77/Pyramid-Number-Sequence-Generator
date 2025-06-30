@@ -1,0 +1,27 @@
+
+`timescale 1 ns / 1 ps
+
+module tb;
+  
+  reg rst1,rst2,sel,clock = 1'b0;
+  wire [3:0] acc_out;
+  
+  reg posedge_egde_detect = 1'b0;
+  
+  series_test UUT(rst1,rst2,sel,clock,acc_out);
+  
+  always 
+    #5 clock <= ~clock;
+
+  initial begin
+    $monitor("Output of ACC : %0d , clock : %0b", acc_out,clock);
+    sel <= 1'b0 ;
+    rst1 <= 1'b1;
+    rst2 <= 1'b1;
+    #10
+    sel <= 1'b1;
+    rst2 <= 1'b0;
+   
+  end
+  
+endmodule

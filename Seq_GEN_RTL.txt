@@ -1,0 +1,51 @@
+`timescale 1 ns / 1 ps
+
+module series_test(
+  
+  					input rst1,rst2,sel,clock,
+  					output [3:0] acc_out);
+  
+  
+  reg [3:0] acc ; //4-bit accumulator reg
+  
+  wire incre_con ; //control reg A increment
+  wire [3:0] count_out;
+  wire count_rst;
+  
+  always@(posedge clock)
+    begin
+      if(rst2)
+        acc <= 4'b00_00;
+      else
+      	acc <= incre_con ? acc + 1'b1 : acc ;
+    end
+  
+  assign incre_con = (count_out == acc_out);
+  
+  assign count_rst = sel ? incre_con : rst1;
+  
+  counter4bit COUNT1(clock,count_rst,count_out);
+  
+  assign acc_out = acc;
+  
+endmodule
+  			
+
+module counter4bit(input clock,count_rst,output [3:0] count_out);
+  
+  reg [3:0] count;
+  
+  always@(posedge clock)
+    begin
+      if(count_rst)
+          count <= 4'b00_01;
+      	else
+            count <= count + 1'b1;
+        
+    end
+  
+  assign count_out = count;
+  
+endmodule
+
+    
